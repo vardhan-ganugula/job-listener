@@ -4,6 +4,7 @@ import webhooksRoute from "./routes/webhooks.route.js";
 import cors from "cors";
 import telegramController from "./controllers/telegram.controller.js";
 import {connectDB} from './libs/db.lib.js'
+import Scrapper from "./controllers/scrapper.controller.js";
 
 const app = express();
 
@@ -11,9 +12,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(cors());
-
-app.get("/", (req, res) => {
-    res.send("Hello World");
+const scrapper = new Scrapper();
+app.get("/", async (req, res) => {
+    const html = await scrapper.searchJobs();
+    res.send(html);
 });
 
 app.use("/api/webhooks", webhooksRoute);
