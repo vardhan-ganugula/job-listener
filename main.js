@@ -1,10 +1,10 @@
 import express from "express";
-import { port } from "./libs/config.util.js";
+import { port } from "./libs/config.lib.js";
 import webhooksRoute from "./routes/webhooks.route.js";
 import cors from "cors";
-import telegramController from "./controllers/telegram.controller.js";
+import telegramController from "./libs/telegram.lib.js";
 import {connectDB} from './libs/db.lib.js'
-import Scrapper from "./controllers/scrapper.controller.js";
+import Scrapper from "./libs/scrapper.lib.js";
 
 const app = express();
 

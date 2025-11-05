@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import {mongodbURI} from './config.util.js'
+import {mongodbURI} from './config.lib.js'
 
 export async function connectDB() {
     try {

@@ -1,7 +1,10 @@
 import {Schema, model} from 'mongoose';
 
 const jobSchema = new Schema({
-    userId : Schema.Types.ObjectId,
+    userId : {
+        type : Schema.Types.ObjectId,
+        ref : 'user'
+    },
     keyword : String,
     location : String,
     experienceLevel : String,

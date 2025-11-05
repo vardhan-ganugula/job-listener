@@ -1,5 +1,5 @@
 import axios from "axios";
-import { telegramBotToken } from "../libs/config.util.js";
+import { telegramBotToken } from "../libs/config.lib.js";
 import userModel from "../models/user.model.js";
 
 class TelegramController {
@@ -138,6 +138,24 @@ class TelegramController {
     } catch (error) {
       console.error(error.message);
     }
+  }
+
+  async sendJobDetailsToUsers(jobData = ''){
+    let users = [];
+    try {
+      users = await userModel.find({});
+    } catch (error) {
+      console.error(error.message)
+    }
+    if(users.length > 0){
+      users.forEach( user => {
+        this.sendMessage(user.userId, JSON.stringify(jobData));
+      })
+    }
+  }
+
+  async parseJobType(resume){
+    
   }
 }
 
