@@ -14,7 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 const scrapper = new Scrapper();
 app.get("/", async (req, res) => {
-    const html = await scrapper.searchJobs();
+    // const html = await scrapper.searchJobs();
     res.send(html);
 });
 

@@ -1,6 +1,8 @@
 import axios from "axios";
 import { telegramBotToken } from "../libs/config.lib.js";
 import userModel from "../models/user.model.js";
+import aiModel from "./ai.lib.js";
+import jobModel from "../models/resume.model.js";
 
 class TelegramController {
   constructor() {
@@ -74,6 +76,12 @@ class TelegramController {
           }
           break;
 
+        case "/update":
+          if (commandText.length > 1) {
+            const textMessage = commandText.slice(1).join(' ').trim()
+            responseText = await this.updateJobDetails(chat.id, textMessage);
+          } else responseText = "Invalid Command Format";
+          break;
         default:
           responseText =
             "❌ Unknown command.\nUse /help to see the available commands.";
@@ -140,22 +148,32 @@ class TelegramController {
     }
   }
 
-  async sendJobDetailsToUsers(jobData = ''){
+  async sendJobDetailsToUsers(jobData = "") {
     let users = [];
     try {
       users = await userModel.find({});
     } catch (error) {
-      console.error(error.message)
+      console.error(error.message);
     }
-    if(users.length > 0){
-      users.forEach( user => {
+    if (users.length > 0) {
+      users.forEach((user) => {
         this.sendMessage(user.userId, JSON.stringify(jobData));
-      })
+      });
     }
   }
 
-  async parseJobType(resume){
-    
+  async updateJobDetails(userId, resumeDetails) {
+    const details = await aiModel.extractResumeDetails(resumeDetails);
+    console.log(userId, details)
+    try {
+        const res = await jobModel.findOneAndUpdate({userId}, {
+        $set: JSON.parse(details)
+      }, {upsert: true})
+      console.log(res)
+    } catch (error) {
+      console.log('Error while updating job details : ', error.message)
+    }
+    return details;
   }
 }
 

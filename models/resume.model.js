@@ -2,7 +2,7 @@ import {Schema, model} from 'mongoose';
 
 const jobSchema = new Schema({
     userId : {
-        type : Schema.Types.ObjectId,
+        type : String,
         ref : 'user'
     },
     keyword : String,
